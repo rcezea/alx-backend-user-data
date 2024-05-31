@@ -1,66 +1,69 @@
 #!/usr/bin/env python3
-"""A module that returns the log message obfuscated"""
-
-from typing import List
-from os import getenv
-import logging
-import mysql.connector
+"""Filtered logging to file"""
 import re
+from typing import List
+import logging
+import os
+import mysql.connector
+from mysql.connector.abstracts import MySQLConnectionAbstract
+from mysql.connector.pooling import PooledMySQLConnection
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
-def filter_datum(
-    fields: List[str], redaction: str, message: str, separator: str
-) -> str:
-    """obfuscating function"""
+def filter_datum(fields: List[str], redaction: str,
+                 message: str, separator: str) -> str:
+    """ use a regex to replace occurrences of certain field values. """
     for field in fields:
         message = re.sub(f"(?<={field}=)[^{separator}]*", redaction, message)
-        # message = re.sub(f"{field}=[^{separator}]*", redaction, message)
     return message
 
 
 class RedactingFormatter(logging.Formatter):
-    """Redacting Formatter class"""
+    """ Redacting Formatter class
+        """
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
     def __init__(self, fields: List[str]):
-        self.fields = fields
         super(RedactingFormatter, self).__init__(self.FORMAT)
+        self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
         """formats logger information"""
-        message = filter_datum(
-            self.fields, self.REDACTION, record.getMessage(), self.SEPARATOR
-        )
-        record.msg = message
+        record.msg = filter_datum(self.fields, self.REDACTION,
+                                  record.msg, self.SEPARATOR)
         return super().format(record)
 
 
 def get_logger() -> logging.Logger:
-    """Get the logger"""
-    my_logger = logging.getLogger("user_data")
-    my_logger.setLevel(logging.INFO)
-    my_logger.propagate = False
-    stream_handler = logging.StreamHandler()
-    stream_handler.setFormatter(RedactingFormatter(PII_FIELDS))
-    my_logger.addHandler(stream_handler)
-    return my_logger
+    """return a logger instance"""
+    logger = logging.getLogger('user_data')
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+    handler = logging.StreamHandler()
+    handler.setFormatter(RedactingFormatter(PII_FIELDS))
+    logger.addHandler(handler)
+    return logger
 
 
-def get_db() -> mysql.connector.connection.MySQLConnection:
-    """Returns connector to the database"""
-    USERNAME = getenv("PERSONAL_DATA_DB_USERNAME", "root")
-    PASSWORD = getenv("PERSONAL_DATA_DB_PASSWORD", "")
-    HOST = getenv("PERSONAL_DATA_DB_HOST", "localhost")
-    DB = getenv("PERSONAL_DATA_DB_NAME")
-    connect = mysql.connector.connect(
-        host=HOST, database=DB, user=USERNAME, password=PASSWORD
+def get_db() -> PooledMySQLConnection | MySQLConnectionAbstract:
+    """Creates a connector to a database.
+    """
+    db_host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    db_name = os.getenv("PERSONAL_DATA_DB_NAME", "")
+    db_user = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    db_pwd = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    connection = mysql.connector.connect(
+        host=db_host,
+        port=3306,
+        user=db_user,
+        password=db_pwd,
+        database=db_name,
     )
-    return connect
+    return connection
 
 
 def main() -> None:
@@ -71,17 +74,17 @@ def main() -> None:
     cursor = db.cursor()
     cursor.execute("SELECT * FROM users")
     for (
-        name,
-        email,
-        phone,
-        ssn,
-        password,
-        ip,
-        last_login,
-        user_agent,
+            name,
+            email,
+            phone,
+            ssn,
+            password,
+            ip,
+            last_login,
+            user_agent,
     ) in cursor:
-        user_details = "name={};email={};phone={};ssn={};password={};"
-        user_details += "ip={};last_login={};user_agent={};".format(
+        user_details = "name={};email={};phone={};ssn={};password={};ip={};"
+        user_details += "last_login={};user_agent={};".format(
             name, email, phone, ssn, password, ip, last_login, user_agent
         )
         my_logger.info(user_details)
