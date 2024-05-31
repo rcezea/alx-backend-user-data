@@ -3,7 +3,7 @@
 import re
 from typing import List
 import logging
-import os
+from os import getenv
 import mysql.connector
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
@@ -48,13 +48,15 @@ def get_logger() -> logging.Logger:
 
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
-    """return an instantiated database"""
-    user = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
-    password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
-    database = os.getenv("PERSONAL_DATA_DB_NAME")
-    host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
-    db = mysql.connector.connect(user, password, host, database)
-    return db
+    """Returns connector to the database"""
+    USERNAME = getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    PASSWORD = getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    HOST = getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    DB = getenv("PERSONAL_DATA_DB_NAME")
+    connect = mysql.connector.connect(
+        host=HOST, database=DB, user=USERNAME, password=PASSWORD
+    )
+    return connect
 
 
 def main() -> None:
