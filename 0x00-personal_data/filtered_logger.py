@@ -49,12 +49,11 @@ def get_logger() -> logging.Logger:
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """return an instantiated database"""
-    user = os.getenv("PERSONAL_DATA_DB_USERNAME")
-    password = os.getenv("PERSONAL_DATA_DB_PASSWORD")
+    user = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
     database = os.getenv("PERSONAL_DATA_DB_NAME")
-    host = os.getenv("PERSONAL_DATA_DB_HOST")
-    db = mysql.connector.connect(user=user, password=password,
-                                 host=host, database=database)
+    host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    db = mysql.connector.connect(user, password, host, database)
     return db
 
 
