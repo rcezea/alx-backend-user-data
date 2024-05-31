@@ -5,8 +5,6 @@ from typing import List
 import logging
 import os
 import mysql.connector
-from mysql.connector.abstracts import MySQLConnectionAbstract
-from mysql.connector.pooling import PooledMySQLConnection
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -49,7 +47,7 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> PooledMySQLConnection | MySQLConnectionAbstract:
+def get_db() -> mysql.connector.connection.MySQLConnection:
     """Creates a connector to a database.
     """
     db_host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
