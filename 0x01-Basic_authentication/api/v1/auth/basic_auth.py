@@ -10,6 +10,7 @@ import base64
 
 
 class BasicAuth(Auth):
+    """ Basic Authentication class"""
     def extract_base64_authorization_header(self,
                                             authorization_header: str) -> str:
         """" Extract encoded string from header """

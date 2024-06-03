@@ -6,6 +6,7 @@ from flask import request
 
 
 class Auth:
+    """ Basic Auth class"""
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
 
         if isinstance(path, str) and path:
