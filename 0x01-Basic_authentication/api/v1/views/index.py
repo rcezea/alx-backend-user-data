@@ -27,7 +27,7 @@ def stats() -> str:
 
 
 @app_views.get('/unauthorized', strict_slashes=False)
-def unauth() -> None:
+def unauthorized() -> None:
     """ GET /api/v1/unauthorized
     """
     abort(401)
