@@ -5,7 +5,7 @@ import binascii
 
 from api.v1.auth.auth import Auth
 from models.user import User
-from typing import TypeVar
+from typing import TypeVar, Tuple
 import base64
 
 
@@ -33,7 +33,7 @@ class BasicAuth(Auth):
         return None
 
     def extract_user_credentials(
-            self, decoded_base64_authorization_header: str) -> (str, str):
+            self, decoded_base64_authorization_header: str) -> Tuple[str, str]:
         """ extract user credentials from header """
         if decoded_base64_authorization_header:
             if isinstance(decoded_base64_authorization_header, str):
