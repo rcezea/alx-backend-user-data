@@ -28,7 +28,7 @@ class BasicAuth(Auth):
                 try:
                     return base64.b64decode(
                         base64_authorization_header).decode('utf-8')
-                except binascii.Error:
+                except binascii.Error, UnicodeDecodeError:
                     return None
         return None
 
