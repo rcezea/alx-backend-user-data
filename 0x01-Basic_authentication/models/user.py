@@ -12,7 +12,6 @@ class User(Base):
     def __init__(self, *args: list, **kwargs: dict):
         """ Initialize a User instance
         """
-        Base.load_from_file()
         super().__init__(*args, **kwargs)
         self.email = kwargs.get('email')
         self._password = kwargs.get('_password')
