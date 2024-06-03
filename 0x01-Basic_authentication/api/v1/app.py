@@ -23,6 +23,7 @@ if getenv('AUTH_TYPE') == 'basic_auth':
 
 @app.before_request
 def before_request() -> None:
+    """ run before any request"""
     if auth is not None:
         path_list = ['/api/v1/status/', '/api/v1/unauthorized/',
                      '/api/v1/forbidden/']
