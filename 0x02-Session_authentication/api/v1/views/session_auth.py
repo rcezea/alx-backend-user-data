@@ -5,7 +5,6 @@ import os
 
 from api.v1.views import app_views
 from flask import abort, jsonify, request
-from api.v1.auth.session_auth import SessionAuth
 from models.user import User
 
 
