@@ -21,7 +21,7 @@ def login_session():
         return jsonify({"error": "password missing"}), 400
     user = User.search({'email': email})
     if user:
-        if not user[0].is_valid_password(password):
+        if user[0].is_valid_password(password):
             from api.v1.app import auth
             session_id = auth.create_session(user.id)
             repr = user.to_json()
