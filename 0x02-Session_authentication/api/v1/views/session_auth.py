@@ -8,24 +8,29 @@ from flask import abort, jsonify, request
 from models.user import User
 
 
-@app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
-def login_session():
-    """ Route for session authentication
-    """
-    email = request.form.get('email')
-    password = request.form.get('password')
+@app_views.route("/auth_session/login", methods=["POST"], strict_slashes=False)
+def auth_login():
+    """Authourise who to give access to
+    resources"""
+    email = request.form.get("email")
+    password = request.form.get("password")
     if not email:
         return jsonify({"error": "email missing"}), 400
+
     if not password:
         return jsonify({"error": "password missing"}), 400
-    user = User.search({'email': email})
-    if user:
-        if user[0].is_valid_password(password):
+
+    user_obj = User.search({"email": email})
+    if user_obj:
+        if user_obj[0].is_valid_password(password):
             from api.v1.app import auth
-            session_id = auth.create_session(user.id[0].id)
-            repr = jsonify(user[0].to_json())
-            name = os.getenv("SESSION_NAME")
-            repr.set_cookie(name, session_id)
-            return repr
+
+            session_id = auth.create_session(user_obj[0].id)
+            session_name = getenv("SESSION_NAME")
+            resp = jsonify(user_obj[0].to_json())
+            resp.set_cookie(session_name, session_id)
+            return resp
+
         return jsonify({"error": "wrong password"}), 401
+
     return jsonify({"error": "no user found for this email"}), 404
