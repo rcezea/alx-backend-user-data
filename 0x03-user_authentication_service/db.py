@@ -38,5 +38,3 @@ class DB:
             return user
         except Exception:
             self._session.rollback()
-            user = None
-            return user
