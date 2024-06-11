@@ -1,6 +1,6 @@
 #!/usr/bin/env pyhton3
 """
-0x03. User authentication service
+A user Model class
 """
 
 from sqlalchemy import Column, String, Integer
