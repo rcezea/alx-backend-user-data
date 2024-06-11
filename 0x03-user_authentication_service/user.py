@@ -1,5 +1,7 @@
 #!/usr/bin/env pyhton3
-""" 0x03. User authentication service """
+"""
+0x03. User authentication service
+"""
 
 from sqlalchemy import Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
@@ -9,6 +11,7 @@ Base = declarative_base()
 
 class User(Base):
     """ User Class """
+
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
