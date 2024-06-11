@@ -40,7 +40,7 @@ class DB:
         session.commit()
         return user
 
-    def find_user_by(self, **kwargs):
+    def find_user_by(self, **kwargs) -> User:
         """ return a specific user """
         if kwargs:
             session = self._session
@@ -57,4 +57,3 @@ class DB:
                     raise InvalidRequestError
             raise NoResultFound
         raise NoResultFound
-
