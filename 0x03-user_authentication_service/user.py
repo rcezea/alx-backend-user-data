@@ -8,9 +8,7 @@ Base = declarative_base()
 
 
 class User(Base):
-    """
-    create a SQLAlchemy model named User for a database table named users
-    """
+    """ User Class """
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
