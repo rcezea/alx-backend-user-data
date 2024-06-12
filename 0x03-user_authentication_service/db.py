@@ -58,7 +58,7 @@ class DB:
             raise NoResultFound
         raise NoResultFound
 
-    def update_user(self,user_id: int, **kwargs) -> None:
+    def update_user(self, user_id: int, **kwargs) -> None:
         """ Update a specific user """
         user = self.find_user_by(id=user_id)
         session = self._session
