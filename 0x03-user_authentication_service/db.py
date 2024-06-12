@@ -57,3 +57,14 @@ class DB:
                     raise InvalidRequestError
             raise NoResultFound
         raise NoResultFound
+
+    def update_user(self,user_id: int, **kwargs) -> None:
+        """ Update a specific user """
+        user = self.find_user_by(id=user_id)
+        session = self._session
+        for key, value in kwargs.items():
+            try:
+                setattr(user, key, value)
+            except ValueError:
+                raise ValueError
+        session.commit()
