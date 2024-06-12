@@ -65,6 +65,6 @@ class DB:
         for key, value in kwargs.items():
             try:
                 setattr(user, key, value)
-            except ValueError:
+            except AttributeError:
                 raise ValueError
         session.commit()
