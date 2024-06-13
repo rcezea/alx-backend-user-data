@@ -3,11 +3,9 @@
 Flask endpoints
 """
 from flask import Flask, jsonify, request, abort
-
-app = Flask('__name__')
-
 from auth import Auth
 
+app = Flask('__name__')
 AUTH = Auth()
 
 
