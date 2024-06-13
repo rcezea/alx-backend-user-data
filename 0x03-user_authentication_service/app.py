@@ -2,7 +2,7 @@
 """
 Flask endpoints
 """
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, redirect
 from auth import Auth
 
 app = Flask('__name__')
@@ -47,6 +47,7 @@ def logout():
     user = AUTH.get_user_from_session_id(session_id)
     if user:
         AUTH.destroy_session(user.id)
+        return redirect('/')
     abort(403)
 
 
