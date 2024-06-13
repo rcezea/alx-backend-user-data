@@ -38,3 +38,8 @@ class Auth:
             return bcrypt.checkpw(password.encode(), user.hashed_password)
         except (NoResultFound, InvalidRequestError):
             return False
+
+    def _generate_uuid(self) -> str:
+        """ Generate UUIDs """
+        import uuid
+        return str(uuid.uuid4())
