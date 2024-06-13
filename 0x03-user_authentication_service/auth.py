@@ -5,6 +5,7 @@ Hash password module
 import bcrypt
 from db import DB, NoResultFound, InvalidRequestError
 from user import User
+import uuid
 
 
 def _hash_password(password: str) -> bytes:
@@ -41,5 +42,4 @@ class Auth:
 
     def _generate_uuid(self) -> str:
         """Generate UUIDs"""
-        import uuid
         return str(uuid.uuid4())
