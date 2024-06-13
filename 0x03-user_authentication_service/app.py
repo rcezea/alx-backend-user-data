@@ -10,6 +10,7 @@ from auth import Auth
 
 AUTH = Auth()
 
+
 @app.route('/', methods=['GET'], strict_slashes=False)
 def home():
     """home endpoint"""
