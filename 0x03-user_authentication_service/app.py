@@ -71,7 +71,7 @@ def get_reset_password_token():
             {"email": email, "reset_token": reset_token}
         ), 200
     except ValueError:
-        abort(402)
+        abort(403)
 
 
 if __name__ == "__main__":
