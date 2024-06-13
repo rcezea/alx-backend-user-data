@@ -40,7 +40,7 @@ class Auth:
         except (NoResultFound, InvalidRequestError):
             return False
 
-    def create_session(self, email):
+    def create_session(self, email: str) -> str:
         """ create a session """
         try:
             user = self._db.find_user_by(email=email)
