@@ -3,7 +3,7 @@
 Hash password module
 """
 import bcrypt
-from db import DB, NoResultFound
+from db import DB, NoResultFound, InvalidRequestError
 from user import User
 
 
@@ -36,5 +36,5 @@ class Auth:
         try:
             user = self._db.find_user_by(email=email)
             return bcrypt.checkpw(password.encode('utf-8'), user.hashed_password)
-        except NoResultFound:
+        except (NoResultFound, InvalidRequestError):
             return False
