@@ -19,6 +19,7 @@ def home():
 
 @app.route('/users', methods=['POST'], strict_slashes=False)
 def users():
+    """ route user registration """
     email = request.form.get('email')
     password = request.form.get('password')
     try:
@@ -30,6 +31,7 @@ def users():
 
 @app.route('/sessions', methods=['POST'], strict_slashes=False)
 def create_session():
+    """ route login """
     email = request.form.get('email')
     password = request.form.get('password')
     if AUTH.valid_login(email, password):
