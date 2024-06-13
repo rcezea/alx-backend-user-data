@@ -40,6 +40,7 @@ class Auth:
         except (NoResultFound, InvalidRequestError):
             return False
 
-    def _generate_uuid(self) -> str:
-        """Generate UUIDs"""
-        return str(uuid.uuid4())
+
+def _generate_uuid() -> str:
+    """Generate UUIDs"""
+    return str(uuid.uuid4())
